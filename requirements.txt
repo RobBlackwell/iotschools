@@ -1,0 +1,6 @@
+azure==0.8.4
+flask
+requests
+geojson
+xlsxwriter
+

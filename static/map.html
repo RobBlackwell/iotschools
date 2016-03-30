@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta charset=utf-8 />
+	<title>Markercluster with Mapbox marker data</title>
+	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+	<script src='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js'></script>
+	<link href='https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.css' rel='stylesheet' />
+
+	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+
+	<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>
+	
+	<style>
+	 body { margin:0; padding:0; }
+	 #map { position:absolute; top:0; bottom:0; width:100%; }
+	</style>
+    </head>
+    <body>
+
+
+	<div id='map'></div>
+
+	<script>
+
+	 function getParameterByName(name, url) {
+	     if (!url) url = window.location.href;
+	     url = url.toLowerCase();
+	     name = name.replace(/[\[\]]/g, "\\$&").toLowerCase();
+	     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+		 results = regex.exec(url);
+	     if (!results) return null;
+	     if (!results[2]) return '';
+	     return decodeURIComponent(results[2].replace(/\+/g, " "));
+	 }
+
+	 var geojson = getParameterByName('geojson');
+	 
+	 L.mapbox.accessToken = 'pk.eyJ1Ijoicm9iYmxhY2t3ZWxsIiwiYSI6ImNpbTRvOG9xbDAwMTR3Y20zcW51Y3dhd2wifQ.PAh_VLOb35AIjduf0vJ8RQ';
+	 
+
+	 
+	 var map = L.mapbox.map('map')
+		    .addLayer(L.mapbox.tileLayer('mapbox.streets'));
+
+	 var clusterGroup = new L.MarkerClusterGroup();
+
+
+
+	 $.getJSON(geojson,
+		   function(data) {
+		       var geojson = L.geoJson(data, {
+			   style: function (feature) {
+			       return feature.properties && feature.properties.style;
+			   },
+
+			   onEachFeature: function (feature, layer) {
+			       if (feature.properties) {
+				   if (feature.properties.popupContent) {
+				       var popupContent = feature.properties.popupContent;
+				   } else {
+				       var name = feature.properties.name || feature.properties.Name || ">>";
+				       var url = feature.properties.url || feature.properties.link || "#";
+				       var popupContent = "<a href=\"" + url + "\">" + name + "</a>"
+				   }
+				   layer.bindPopup(popupContent);
+
+			       }
+			   }
+		       });
+		       clusterGroup.addLayer(geojson);
+		       map.addLayer(clusterGroup);
+
+		       map.fitBounds(geojson.getBounds());
+
+		   });
+
+	 
+	 
+
+	 
+	 
+	 var layers = {
+	     Streets: L.mapbox.tileLayer('mapbox.streets'),
+	     Outdoors: L.mapbox.tileLayer('mapbox.outdoors'),
+	     Satellite: L.mapbox.tileLayer('mapbox.satellite')
+	 };
+	 
+	 layers.Streets.addTo(map);
+	 L.control.layers(layers).addTo(map);
+
+
+
+	 
+	</script>
+    </body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <title>Data</title>
+
+  <meta name="author" content="Rob Blackwell">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/custom.css">
+
+  <link rel="icon" type="image/png" href="images/favicon.ico">
+
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="js/params.js"></script>
+  <script src="js/tablify.js"></script>
+  <script src="js/FileSaver.js"></script>
+  <script src="js/jsonselect.js"></script>
+
+
+</head>
+<body>
+    <div class="section">
+	<div class="container">
+	    <div class="row">
+		<div class="column">
+		    <h1><div id="h1"></div></h1>
+		    <h2><div id="h2"></div></h2>
+		</div>
+	    </div>
+	    <div class="row">
+
+		<div align="center">
+		    <div id="table"></div>
+		    <div id="button"></div>
+
+		    <script>
+
+		     var thedata = "";
+
+		     function onExport() {
+			 sheet = toCSV(thedata);
+			 var blob = new Blob([sheet], {type: "text/csv"});
+			 saveAs(blob, "sheet.csv");
+		     }
+		     
+		     function isSelector(s) {
+			 return (s && (s.substring(0, 1) === "."));
+		     }
+
+		     var json = getParameterByName('json');
+		     var h1 =  getParameterByName('h1');
+		     var h2 =  getParameterByName('h2');
+		     var table =  getParameterByName('table');
+
+		     $.getJSON(json, function(data) {
+
+			 if (isSelector(h1)) {
+			     h1 =  JSONSelect.match(h1, data);
+			 }
+
+			 if (isSelector(h2)) {
+			     h2 =  JSONSelect.match(h2, data);
+			 }
+
+			 if (isSelector(table)) {
+			     data =  JSONSelect.match(table, data);
+			 }
+
+			 $("#h1").html(h1);
+			 $("#h2").html(h2);
+			 $("#table").html(toTable(data));
+
+			 thedata = data;
+
+			 $("#button").html("<button onclick=\"onExport()\">CSV</button>");
+
+		     });
+
+		    </script>
+
+		</div>
+
+		
+	    </div>
+	</div>
+</body>
+</html>

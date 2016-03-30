@@ -1,0 +1,62 @@
+﻿header
+{
+    height: 150px;
+    background-position: right top;
+    background-repeat: no-repeat;
+    background-image: url('images/header.png');
+}
+
+
+footer
+{
+    text-align: center;
+    font-size: 8pt;
+}
+
+div.nav
+{
+
+    position: relative;
+    width: 100%;
+    text-align: right;
+}
+
+h1
+{
+    color: #0a457d;
+    font-size: 16pt;
+}
+
+p
+{
+    font-size: 12pt;
+}
+
+body
+{
+    margin-top: 10px;
+    font-family: Trebuchet MS, Arial, sans-serif;
+
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 0;
+}
+
+td.legend-label
+{
+    font-size: 6pt;
+}
+
+div.legend
+{
+
+    position: absolute;
+    z-index: 999;
+    
+    background: white;
+    right: 15px;
+    top: 235px;
+    border: 1px solid black;
+}
+
+
