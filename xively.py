@@ -48,19 +48,19 @@ def monthly_ranges(from_date, to_date):
 def get_feed(feed_id, range='', key = KEY):
     url = 'https://api.xively.com/v2/feeds/' + str(feed_id)  + range 
     headers = {'X-ApiKey': key}
-    r = requests.get(url,  headers=headers)
+    r = requests.get(url,  headers=headers, verify=False)
     return r
 
 def get_feeds(query='', key = KEY):
     url = 'https://api.xively.com/v2/feeds'  + query 
     headers = {'X-ApiKey': key}
-    r = requests.get(url,  headers=headers)
+    r = requests.get(url,  headers=headers, verify=False)
     return r
 
 def get_datastream(feed_id, datastream_id, range='', key = KEY):
     url = 'https://api.xively.com/v2/feeds/' + str(feed_id) + '/datastreams/' + str(datastream_id) + range 
     headers = {'X-ApiKey': key}
-    r = requests.get(url,  headers=headers)
+    r = requests.get(url,  headers=headers, verify=False)
     return r
 
 # Range queries
